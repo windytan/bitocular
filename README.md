@@ -18,6 +18,10 @@ HTML text:
 
 ![8-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-8bitwav3.png)
 
+4-bit ADPCM audio:
+
+![4-bit ADPCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-4bitwav3.png)
+
 Bzip2 compressed source code:
 
 ![Bzip2](http://www.cs.helsinki.fi/u/okraisan/bitview-bzip2-3.png)
