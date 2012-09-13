@@ -8,23 +8,23 @@ Examples
 --------
 HTML text:
 
-![HTML text](http://www.cs.helsinki.fi/u/okraisan/bitview-html2.png)
+![HTML text](http://www.cs.helsinki.fi/u/okraisan/bitview-html3.png)
 
 16-bit PCM audio:
 
-![16-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-wav2.png)
+![16-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-16bitwav3.png)
 
 8-bit PCM audio:
 
-![8-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-8bitwav2.png)
+![8-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-8bitwav3.png)
 
-Bzip2 compressed text:
+Bzip2 compressed source code:
 
-![Bzip2](http://www.cs.helsinki.fi/u/okraisan/bitview-bzip22.png)
+![Bzip2](http://www.cs.helsinki.fi/u/okraisan/bitview-bzip2-3.png)
 
 Pseudorandom bits from /dev/urandom:
 
-![Pseudorandom](http://www.cs.helsinki.fi/u/okraisan/bitview-random2.png)
+![Pseudorandom](http://www.cs.helsinki.fi/u/okraisan/bitview-random3.png)
 
 
 Licensing
