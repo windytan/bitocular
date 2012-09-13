@@ -1,34 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <requires lib="gtk+" version="2.24"/>
-  <object class="GtkTextTagTable" id="texttagtable1">
-    <child type="tag">
-      <object class="GtkTextTag" id="texttag2">
-        <property name="background_rgba">rgb(255,255,255)</property>
-        <property name="foreground_rgba">rgb(0,0,0)</property>
-        <property name="font">Normal</property>
-        <property name="family">Monospace</property>
-        <property name="size">9</property>
-        <property name="editable">False</property>
-        <property name="paragraph_background_rgba">rgb(255,255,255)</property>
-      </object>
-    </child>
-  </object>
+  <!-- interface-naming-policy toplevel-contextual -->
+  <object class="GtkTextTagTable" id="texttagtable1"/>
   <object class="GtkWindow" id="window1">
     <property name="can_focus">False</property>
     <property name="border_width">10</property>
-    <property name="has_resize_grip">False</property>
     <child>
       <object class="GtkTable" id="grid1">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="n_rows">3</property>
+        <property name="n_rows">4</property>
         <property name="n_columns">2</property>
         <property name="column_spacing">10</property>
         <property name="row_spacing">10</property>
         <child>
-          <object class="GtkFrame" id="frame1">
+          <object class="GtkFrame" id="hexframe">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
@@ -46,7 +35,7 @@
                     <property name="can_focus">False</property>
                     <property name="yalign">0</property>
                     <attributes>
-                      <attribute name="font-desc" value="Monospace 6"/>
+                      <attribute name="size" value="7000"/>
                     </attributes>
                   </object>
                 </child>
@@ -63,8 +52,9 @@
           </object>
         </child>
         <child>
-          <object class="GtkFrame" id="frame2">
+          <object class="GtkFrame" id="histoframe">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
@@ -103,8 +93,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame3">
+          <object class="GtkFrame" id="entframe">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
@@ -120,7 +111,6 @@
                   <object class="GtkTable" id="grid2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
-                    <property name="valign">start</property>
                     <property name="n_rows">4</property>
                     <child>
                       <object class="GtkLabel" id="label5">
@@ -135,9 +125,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="font-desc" value="Sans 8"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -159,9 +146,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="font-desc" value="Sans 8"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -184,9 +168,6 @@
                         <property name="visible">True</property>
                         <property name="can_focus">False</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="font-desc" value="Sans 8"/>
-                        </attributes>
                       </object>
                       <packing>
                         <property name="left_attach">2</property>
@@ -239,10 +220,8 @@
                           <object class="GtkLabel" id="label8">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">start</property>
                             <property name="label" translatable="yes">non-random</property>
                             <attributes>
-                              <attribute name="font-desc" value="Sans Italic 6"/>
                               <attribute name="foreground" value="#800080008000"/>
                             </attributes>
                           </object>
@@ -256,11 +235,9 @@
                           <object class="GtkLabel" id="label10">
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
-                            <property name="valign">start</property>
                             <property name="label" translatable="yes">random</property>
                             <property name="justify">right</property>
                             <attributes>
-                              <attribute name="font-desc" value="Sans Italic 6"/>
                               <attribute name="foreground" value="#800080008000"/>
                             </attributes>
                           </object>
@@ -304,8 +281,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame4">
+          <object class="GtkFrame" id="poincframe">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
@@ -344,8 +322,9 @@
           </packing>
         </child>
         <child>
-          <object class="GtkFrame" id="frame5">
+          <object class="GtkFrame" id="magicframe">
             <property name="visible">True</property>
+            <property name="sensitive">False</property>
             <property name="can_focus">False</property>
             <property name="label_xalign">0</property>
             <property name="shadow_type">in</property>
@@ -380,6 +359,19 @@
           <packing>
             <property name="top_attach">1</property>
             <property name="bottom_attach">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="statusbar">
+            <property name="visible">True</property>
+            <property name="can_focus">False</property>
+            <property name="spacing">2</property>
+            <property name="has_resize_grip">False</property>
+          </object>
+          <packing>
+            <property name="right_attach">2</property>
+            <property name="top_attach">3</property>
+            <property name="bottom_attach">4</property>
           </packing>
         </child>
       </object>
