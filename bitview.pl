@@ -8,6 +8,8 @@ use utf8;
 use constant TRUE  => 1;
 use constant FALSE => 0;
 
+$pi = 3.141592653589793;
+
 $builder = Gtk2::Builder->new();
 $builder->add_from_file("$Bin/bitui.ui");
 
@@ -17,11 +19,13 @@ $entlabel   = $builder->get_object("entlabel");
 $meanlabel  = $builder->get_object("meanlabel");
 $chi2label  = $builder->get_object("chi2label");
 $magiclabel = $builder->get_object("magiclabel");
+$corrlabel  = $builder->get_object("corrlabel");
 $histoimage = $builder->get_object("histoimage");
 $poincimage = $builder->get_object("poincimage");
 $entimage   = $builder->get_object("entimage");
 $meanimage  = $builder->get_object("meanimage");
 $chi2image  = $builder->get_object("chi2image");
+$corrimage  = $builder->get_object("corrimage");
 
 $hexframe    = $builder->get_object("hexframe");
 $magicframe  = $builder->get_object("magicframe");
@@ -127,13 +131,15 @@ sub worksub {
       $chi2 = $1;
     } elsif (/mean value .* is (\S+)/) {
       $mean = $1;
+    } elsif (/coefficient is (\S+)/) {
+      $corr = $1;
     }
   }
   close(SIS);
 
   if    ($chi2 < 1  || $chi2 > 99) { $chirand = "non-random";     }
-  elsif ($chi2 < 5  || $chi  > 95) { $chirand = "suspect";        }
-  elsif ($chi2 < 10 || $chi  > 90) { $chirand = "almost suspect"; }
+  elsif ($chi2 < 5  || $chi2 > 95) { $chirand = "suspect";        }
+  elsif ($chi2 < 10 || $chi2 > 90) { $chirand = "almost suspect"; }
   else                             { $chirand = "very random";    }
 
   Gtk2::Gdk::Threads->enter;
@@ -142,19 +148,54 @@ sub worksub {
   $meanlabel->set_text($mean);
   #$chi2label->set_text("$chi2 % ($chirand)");
   $chi2label->set_text("$chi2 %");
+  $corrlabel->set_text("$corr");
   Gtk2::Gdk::Threads->leave;
 
-  system("convert $Bin/chi2meter.png $Bin/needle.png -geometry +".
-         int((50-abs($chi2-50))/50*255+2)."+1 -composite /tmp/chi2meter.png");
-  system("convert $Bin/entmeter.png $Bin/needle.png -geometry +".int($ent/8*255+2).
-         "+1 -composite /tmp/entmeter.png");
-  system("convert $Bin/meanmeter.png $Bin/needle.png -geometry +".
-         int(255-abs(127.5-$mean)/127.5*255+2)."+1 -composite /tmp/meanmeter.png");
+#  system("convert $Bin/chi2meter.png $Bin/needle.png -geometry +".
+#         int((50-abs($chi2-50))/50*255+2)."+1 -composite /tmp/chi2meter.png");
+#  system("convert $Bin/entmeter.png $Bin/needle.png -geometry +".int($ent/8*255+2).
+#         "+1 -composite /tmp/entmeter.png");
+#  system("convert $Bin/meanmeter.png $Bin/needle.png -geometry +".
+#         int(255-abs(127.5-$mean)/127.5*255+2)."+1 -composite /tmp/meanmeter.png");
+
+  $entangle  = -$ent/8 * $pi + $pi/2;
+  $meanangle = -(255-abs(127.5-$mean)/127.5) * $pi;# + $pi/2;
+  
+  $chi2 = 100-$chi2 if ($chi2 > 50);
+  if ($chi2 >= 25) {
+    $chiangle = -$pi + $pi/2;
+  } else {
+    $chiangle = $chi2/25 * $pi + $pi/2;
+  }
+
+  if ($corr > .75) {
+    $corr = 1;
+  } else {
+    $corr /= .75;
+  }
+  $corrangle = abs($corr) * $pi - $pi/2;
+
+
+  $entangle  = $entangle  * .778;# + 20/180*$pi;
+  $meanangle = $meanangle * .778;# + 20/180*$pi;
+  $chiangle  = $chiangle  * .778;# + 20/180*$pi;
+  $corrangle = $corrangle * .778;## + 40/180*$pi;
+
+
+
+  system("convert -size 75x46 xc:transparent -draw \'circle 38,38 42,38\' -stroke \'#cccccc\' -strokewidth 5 -fill transparent -draw \'arc 12,12 64,64 200,340\' -stroke black -strokewidth 2 -draw \'line 37,37 ".(38-26*sin($entangle)).",".(37-26*cos($entangle))."\' /tmp/entmeter.png"); 
+
+  system("convert -size 75x46 xc:transparent -draw \'circle 38,38 42,38\' -stroke \'#cccccc\' -strokewidth 5 -fill transparent -draw \'arc 12,12 64,64 200,340\' -stroke black -strokewidth 2 -draw \'line 37,37 ".(38-26*sin($meanangle)).",".(37-26*cos($meanangle))."\' /tmp/meanmeter.png"); 
+
+  system("convert -size 75x46 xc:transparent -draw \'circle 38,38 42,38\' -stroke \'#cccccc\' -strokewidth 5 -fill transparent -draw \'arc 12,12 64,64 200,340\' -stroke black -strokewidth 2 -draw \'line 37,37 ".(38-26*sin($chiangle)).",".(37-26*cos($chiangle))."\' /tmp/chi2meter.png"); 
+
+  system("convert -size 75x46 xc:transparent -draw \'circle 38,38 42,38\' -stroke \'#cccccc\' -strokewidth 5 -fill transparent -draw \'arc 12,12 64,64 200,340\' ".($corr ne "undefined" && "-stroke black -strokewidth 2 -draw \'line 37,37 ".(38-26*sin($corrangle)).",".(37-26*cos($corrangle))."\'")." /tmp/corrmeter.png"); 
 
   Gtk2::Gdk::Threads->enter;
   $entimage->set_from_file("/tmp/entmeter.png");
   $chi2image->set_from_file("/tmp/chi2meter.png");
   $meanimage->set_from_file("/tmp/meanmeter.png");
+  $corrimage->set_from_file("/tmp/corrmeter.png");
   Gtk2::Gdk::Threads->leave;
   
   Gtk2::Gdk::Threads->enter;

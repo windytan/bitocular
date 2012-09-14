@@ -4,32 +4,16 @@ A tool to quickly examine the general structure of a file. Inspired by [baudline
 
 ![File manager context menu](http://www.cs.helsinki.fi/u/okraisan/bitview-menu.png)
 
-Examples
+Features
 --------
-HTML text:
 
-![HTML text](http://www.cs.helsinki.fi/u/okraisan/bitview-html3.png)
+![Screenshot](http://www.cs.helsinki.fi/u/okraisan/bitshot-readme.png)
 
-16-bit PCM audio:
-
-![16-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-16bitwav3.png)
-
-8-bit PCM audio:
-
-![8-bit PCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-8bitwav3.png)
-
-4-bit ADPCM audio:
-
-![4-bit ADPCM audio](http://www.cs.helsinki.fi/u/okraisan/bitview-4bitwav3.png)
-
-Bzip2 compressed source code:
-
-![Bzip2](http://www.cs.helsinki.fi/u/okraisan/bitview-bzip2-3.png)
-
-Pseudorandom bits from /dev/urandom:
-
-![Pseudorandom](http://www.cs.helsinki.fi/u/okraisan/bitview-random3.png)
-
+1. hexdump. Enough said.
+2. Tries to determine file type based on magic numbers etc (actually the output of the file command).
+3. Some indicators that help determine whether the data is truly random (actually parsed output of the ent command). The more to the right a needle is, the more random the data. Entropy and mean are self-explanatory. Corr shows serial correlation. Chi^2 calculates a chi-squared test on the data, something that is very sensitive to any kind of non-random patterns even in pseudorandom number generators.
+4. Byte value histogram, 0..255.
+5. Poincaré plot of all byte values. A Poincaré plot plots byte x against byte (x+1). This produces quite recognizable patterns for many kinds of (non-random) data formats.
 
 Licensing
 ---------
