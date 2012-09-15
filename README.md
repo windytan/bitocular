@@ -9,11 +9,20 @@ Features
 
 ![Screenshot](http://www.cs.helsinki.fi/u/okraisan/bitshot-readme.png)
 
-1. hexdump. Enough said.
-2. Tries to determine file type based on magic numbers etc (actually the output of the file command).
-3. Some indicators that help determine whether the data is truly random (actually parsed output of the ent command). The more to the right a needle is, the more random the data. Entropy and mean are self-explanatory. Corr shows serial correlation. Chi^2 calculates a chi-squared test on the data, something that is very sensitive to any kind of non-random patterns even in pseudorandom number generators.
-4. Byte value histogram, 0..255.
-5. Poincaré plot of all byte values. A Poincaré plot plots byte x against byte (x+1). This produces quite recognizable patterns for many kinds of (non-random) data formats.
+(1) hexdump: A hex dump.
+
+(2) magic: Tries to determine file type based on magic numbers etc (actually the output of the `file` command)
+
+(3) randomness: Some indicators that help determine if the data is truly random (actually parsed output of the `ent` command). The graphic gauges are designed so that for more random data the needles are more to the right.
+
+*  entropy: self-explanatory.
+*  mean: arithmetic mean value of all bytes.
+*  corr: serial correlation coefficient.
+*  chi²: chi-square test, very sensitive to non-randomness even in pseudorandom number generators. Displayed is a percentage of how frequently a truly random sequence would exceed the test result.
+
+(4) histogram: Byte value histogram, 0x00 .. 0xff.
+
+(5) poincare: The Poincaré plot is a plot of all bytes x(n) againts x(n+1). This produces quite recognizable patterns for many kinds of (non-random) data formats.
 
 Licensing
 ---------

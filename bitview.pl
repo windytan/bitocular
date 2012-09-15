@@ -4,6 +4,7 @@ use Gtk2 qw( -init -threads-init );
 use threads;
 use FindBin '$Bin';
 use utf8;
+use Image::Magick;
 
 use constant TRUE  => 1;
 use constant FALSE => 0;
@@ -34,11 +35,14 @@ $histoframe  = $builder->get_object("histoframe");
 $poincframe  = $builder->get_object("poincframe");
 
 $statusbar  = $builder->get_object("statusbar");
-$context_id = $statusbar->get_context_id("Statusbar example");
+$context_id = $statusbar->get_context_id("");
 
-$window-> signal_connect (delete_event => sub {Gtk2->main_quit; FALSE});
+$window->signal_connect (delete_event => sub {Gtk2->main_quit; FALSE});
 $window->show_all();
 $window->set_title($ARGV[0]);
+
+$histo = Image::Magick->new(size=>'256x256');
+$poinc = Image::Magick->new(size=>'256x256');
 
 # color gradient
 for (0..127) {
@@ -87,8 +91,6 @@ for (128..255) {
 
 $_ = pack("H*", $_) for (@rgb);
 
-#printf("%02x%02x%02x\n",unpack("CCC",$rgb[$_])) for (0..255);
-
 &mkhistogram;
 
 
@@ -102,7 +104,9 @@ sub worksub {
   $statusbar->push($context_id, "hexdump...");
   Gtk2::Gdk::Threads->leave;
 
-  $hd = qx!hexdump -C -n 384 -v '$ARGV[0]'|head -n 24!;
+  open(S,"hexdump -C -n 384 -v '$ARGV[0]'|head -n 24|");
+  $hd = join("",<S>);
+  close(S);
   Gtk2::Gdk::Threads->enter;
   $hexframe->set_sensitive(TRUE);
   $hdlabel->set_text($hd);
@@ -112,7 +116,9 @@ sub worksub {
   $statusbar->push($context_id, "magic...");
   Gtk2::Gdk::Threads->leave;
 
-  $magic = qx!file -b '$ARGV[0]'!;
+  open(S,"file -b '$ARGV[0]'|");
+  $magic = join("",<S>);
+  close(S);
   Gtk2::Gdk::Threads->enter;
   $magicframe->set_sensitive(TRUE);
   $magiclabel->set_text($magic);
@@ -168,19 +174,17 @@ sub worksub {
     $chiangle = $chi2/25 * $pi + $pi/2;
   }
 
-  if ($corr > .75) {
-    $corr = 1;
-  } else {
-    $corr /= .75;
-  }
-  $corrangle = abs($corr) * $pi - $pi/2;
-
+  print "$corr\n";
+  $corr = 0.01/$corr;
+  $corr = 1 if ($corr > 1);
+  print "$corr corr\n";
+  $corrangle = -$corr * $pi + $pi/2;
+  print "$corrangle corrangle\n";
 
   $entangle  = $entangle  * .778;# + 20/180*$pi;
   $meanangle = $meanangle * .778;# + 20/180*$pi;
   $chiangle  = $chiangle  * .778;# + 20/180*$pi;
   $corrangle = $corrangle * .778;## + 40/180*$pi;
-
 
 
   system("convert -size 75x46 xc:transparent -draw \'circle 38,38 42,38\' -stroke \'#cccccc\' -strokewidth 5 -fill transparent -draw \'arc 12,12 64,64 200,340\' -stroke black -strokewidth 2 -draw \'line 37,37 ".(38-26*sin($entangle)).",".(37-26*cos($entangle))."\' /tmp/entmeter.png"); 
@@ -214,7 +218,7 @@ sub worksub {
       $maxpoinc = $poinc[$prev][$a] if ($poinc[$prev][$a] > ($maxpoinc // 0));
     }
     $prev = $a;
-    if ($n % 500000 == 0) {
+    if ($n % 100000 == 0) {
       &mkhistogram;
       Gtk2::Gdk::Threads->enter;
       $histoframe->set_sensitive(TRUE);
@@ -238,8 +242,14 @@ sub mkhistogram {
   open(IM, "|convert -depth 8 -size 256x256 gray:- /tmp/histo.png");
   for $y (0..255) {
     for $x (0..255) {
-      if (($maxhisto // 0) > 0 && ($histo[$x] // 0) / $maxhisto * 255 >= 256 - $y) {
-        print IM chr(0x00);
+      if (($maxhisto // 0) > 0 &&
+          ($histo[$x] // 0) / $maxhisto * 255 >= 256 - $y) {
+        $shade = $histo[$x] / $maxhisto * 255 - (256-$y);
+        if ($shade < 1) {
+          print IM chr(int(0xdd-(0xdd*$shade)));
+        } else {
+          print IM chr(0x00);
+        }
       } else {
         print IM chr(0xdd);
       }
