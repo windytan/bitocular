@@ -1,4 +1,4 @@
-bit view
+bitocular
 ========
 A tool to quickly examine the general structure of a file. Inspired by [baudline's bit view](http://www.baudline.com/manual/open_file.html#bit_view). Also uses [ent](http://www.fourmilab.ch/random/).
 
@@ -27,7 +27,7 @@ Features
 Licensing
 ---------
 
-    Copyright (c) 2012, windytan (Oona Räisänen)
+    Copyright (c) 2012-2013, windytan (Oona Räisänen)
     
     Permission to use, copy, modify, and/or distribute this software for any
     purpose with or without fee is hereby granted, provided that the above
