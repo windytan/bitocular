@@ -4,6 +4,8 @@ A tool to quickly examine the general structure of a file. Inspired by [baudline
 
 ![File manager context menu](http://www.cs.helsinki.fi/u/okraisan/bitview-menu.png)
 
+***This project is not maintained any more.***
+
 Features
 --------
 
